@@ -42,6 +42,15 @@
       padding-bottom: 12px;
       border-bottom: 1px solid #e1e4e8;
     }
+    .card h3 {
+      font-size: 1.1rem;
+      margin: 24px 0 12px 0;
+      color: #24292f;
+    }
+    .card p {
+      margin-bottom: 12px;
+      color: #57606a;
+    }
 
     .preview {
       background: #f6f8fa;
@@ -55,40 +64,21 @@
       height: auto;
     }
 
-    .input-group {
-      margin-bottom: 20px;
-    }
-    .input-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #24292f;
-    }
-    .input-group input {
-      width: 100%;
-      padding: 10px 14px;
-      font-size: 1rem;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      background: #fff;
-    }
-    .input-group input:focus {
-      outline: none;
-      border-color: #0969da;
-      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
-    }
-
     .code-block {
       background: #24292f;
       color: #e6edf3;
       border-radius: 8px;
       padding: 16px;
       font-family: 'SFMono-Regular', Consolas, monospace;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       overflow-x: auto;
       position: relative;
+      margin-bottom: 16px;
     }
     .code-block code {
+      white-space: pre;
+    }
+    .code-block.wrap code {
       white-space: pre-wrap;
       word-break: break-all;
     }
@@ -101,16 +91,42 @@
       border: none;
       border-radius: 6px;
       padding: 6px 12px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       cursor: pointer;
     }
     .copy-btn:hover { background: #6e7681; }
     .copy-btn.copied { background: #198754; }
 
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .step-number {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: #0969da;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .step-content {
+      flex: 1;
+    }
+    .step-content h3 {
+      margin: 0 0 8px 0;
+      font-size: 1rem;
+    }
+
     .tabs {
       display: flex;
       gap: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .tab {
       padding: 8px 16px;
@@ -126,20 +142,78 @@
       border-color: #0969da;
     }
 
-    .options {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+    .deploy-options {
+      display: none;
     }
-    .option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .deploy-options.active {
+      display: block;
     }
-    .option input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+
+    .env-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    .env-table th, .env-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e1e4e8;
+    }
+    .env-table th {
+      background: #f6f8fa;
+      font-weight: 600;
+    }
+    .env-table code {
+      background: #f6f8fa;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #24292f;
+      font-size: 0.9rem;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 1rem;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #fff;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: #0969da;
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
+    }
+    .input-group small {
+      display: block;
+      margin-top: 4px;
+      color: #57606a;
+      font-size: 0.8rem;
+    }
+
+    .alert {
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .alert.info {
+      background: #ddf4ff;
+      border: 1px solid #54aeff;
+      color: #0969da;
+    }
+    .alert.warning {
+      background: #fff8c5;
+      border: 1px solid #d4a72c;
+      color: #9a6700;
     }
 
     footer {
@@ -158,8 +232,8 @@
       border-radius: 12px;
       font-size: 0.75rem;
       font-weight: 600;
-      margin-left: 8px;
     }
+    .badge.required { background: #ffebe9; color: #cf222e; }
     .badge.optional { background: #ddf4ff; color: #0969da; }
   </style>
 </head>
@@ -170,54 +244,294 @@
       <p class="subtitle">Beautiful developer stats cards for your GitHub README</p>
     </header>
 
+    <!-- Preview Section -->
     <div class="card">
-      <h2>Try It Out</h2>
-      <div class="input-group">
-        <label for="username">GitHub Username</label>
-        <input type="text" id="username" placeholder="Enter your GitHub username" value="cancelei">
+      <h2>Preview</h2>
+      <div class="preview">
+        <img src="/api/strike/cancelei" alt="GitHub Strike Card">
+      </div>
+      <p style="text-align: center; color: #57606a;">Deploy your own instance to get personalized stats with your GitHub token.</p>
+    </div>
+
+    <!-- Quick Start -->
+    <div class="card">
+      <h2>Quick Start</h2>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Get Your GitHub Token</h3>
+          <p>Create a personal access token at <a href="https://github.com/settings/tokens/new" target="_blank">GitHub Settings</a>.</p>
+          <p>Required scopes: <code>read:user</code>, <code>repo</code> (for private repo stats)</p>
+        </div>
       </div>
 
-      <div class="preview" id="strike-preview">
-        <img id="strike-img" src="/api/strike/cancelei" alt="GitHub Strike Card">
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Deploy Your Instance</h3>
+          <p>Choose your preferred deployment method below.</p>
+        </div>
       </div>
 
-      <div class="options">
-        <label class="option">
-          <input type="checkbox" id="include-flukebase">
-          <span>Include Flukebase Card <span class="badge optional">Optional</span></span>
-        </label>
-      </div>
-
-      <div class="preview" id="flukebase-preview" style="display: none;">
-        <img id="flukebase-img" src="/api/flukebase/cancelei" alt="Flukebase Card">
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Add to Your README</h3>
+          <p>Use your deployed URL to embed the stats card in your GitHub profile.</p>
+        </div>
       </div>
     </div>
 
+    <!-- Deployment Options -->
     <div class="card">
-      <h2>Add to Your README</h2>
-      <p style="margin-bottom: 16px; color: #57606a;">Copy this markdown and paste it into your GitHub profile README:</p>
+      <h2>Deployment</h2>
 
       <div class="tabs">
-        <button class="tab active" data-tab="markdown">Markdown</button>
-        <button class="tab" data-tab="html">HTML</button>
+        <button class="tab active" data-deploy="local">Local</button>
+        <button class="tab" data-deploy="docker">Docker</button>
+        <button class="tab" data-deploy="vercel">Vercel</button>
+        <button class="tab" data-deploy="caprover">CapRover</button>
       </div>
 
-      <div class="code-block">
-        <button class="copy-btn" onclick="copyCode()">Copy</button>
-        <code id="code-output">![GitHub Strike](https://github-strike.flukebase.me/api/strike/cancelei)</code>
+      <!-- Local -->
+      <div class="deploy-options active" id="deploy-local">
+        <h3>Test Locally</h3>
+        <p>Clone and run the project on your machine:</p>
+
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <code>git clone https://github.com/cancelei/github_strike.git
+cd github_strike
+npm install</code>
+        </div>
+
+        <p>Create a <code>.env</code> file:</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <code>GITHUB_TOKEN=ghp_your_token_here
+FLUKEBASE_API_KEY=fbk_your_key_here  # Optional</code>
+        </div>
+
+        <p>Start the server:</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <code>npm run dev</code>
+        </div>
+
+        <p>Open <a href="http://localhost:3000/api/strike/YOUR_USERNAME" target="_blank">http://localhost:3000/api/strike/YOUR_USERNAME</a></p>
+      </div>
+
+      <!-- Docker -->
+      <div class="deploy-options" id="deploy-docker">
+        <h3>Deploy with Docker</h3>
+        <p>Build and run with Docker:</p>
+
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <code>git clone https://github.com/cancelei/github_strike.git
+cd github_strike
+docker build -t github-strike .</code>
+        </div>
+
+        <p>Run the container:</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <code>docker run -d -p 3000:3000 \
+  -e GITHUB_TOKEN=ghp_your_token_here \
+  -e FLUKEBASE_API_KEY=fbk_your_key_here \
+  github-strike</code>
+        </div>
+
+        <div class="alert info">
+          For production, deploy to any Docker host (AWS ECS, Google Cloud Run, DigitalOcean, Railway, etc.) and set the environment variables in your platform's dashboard.
+        </div>
+      </div>
+
+      <!-- Vercel -->
+      <div class="deploy-options" id="deploy-vercel">
+        <h3>Deploy to Vercel</h3>
+
+        <p>1. Fork the repository on GitHub:</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <code>https://github.com/cancelei/github_strike</code>
+        </div>
+
+        <p>2. Import to Vercel:</p>
+        <ul style="margin: 12px 0 12px 24px; color: #57606a;">
+          <li>Go to <a href="https://vercel.com/new" target="_blank">vercel.com/new</a></li>
+          <li>Import your forked repository</li>
+          <li>Framework Preset: <strong>Other</strong></li>
+          <li>Build Command: <code>npm run build</code></li>
+          <li>Output Directory: <code>dist</code></li>
+        </ul>
+
+        <p>3. Add Environment Variables in Vercel dashboard:</p>
+        <table class="env-table">
+          <tr>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td><code>GITHUB_TOKEN</code></td>
+            <td>Your GitHub personal access token</td>
+          </tr>
+          <tr>
+            <td><code>FLUKEBASE_API_KEY</code></td>
+            <td>Your Flukebase API key (optional)</td>
+          </tr>
+        </table>
+
+        <p>4. Deploy and get your URL (e.g., <code>github-strike-yourusername.vercel.app</code>)</p>
+
+        <div class="alert warning">
+          Note: You may need to create a <code>vercel.json</code> for proper routing. See the repo README for details.
+        </div>
+      </div>
+
+      <!-- CapRover -->
+      <div class="deploy-options" id="deploy-caprover">
+        <h3>Deploy to CapRover</h3>
+
+        <p>1. Create a new app in your CapRover dashboard</p>
+
+        <p>2. Set environment variables in App Configs:</p>
+        <table class="env-table">
+          <tr>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td><code>GITHUB_TOKEN</code></td>
+            <td>Your GitHub personal access token</td>
+          </tr>
+          <tr>
+            <td><code>FLUKEBASE_API_KEY</code></td>
+            <td>Your Flukebase API key (optional)</td>
+          </tr>
+        </table>
+
+        <p>3. Deploy via CLI:</p>
+        <div class="code-block">
+          <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+          <code>git clone https://github.com/cancelei/github_strike.git
+cd github_strike
+caprover deploy</code>
+        </div>
+
+        <p>Or deploy from GitHub in the CapRover dashboard using the repo URL.</p>
       </div>
     </div>
 
+    <!-- Environment Variables -->
     <div class="card">
-      <h2>Available Endpoints</h2>
-      <table style="width: 100%; border-collapse: collapse;">
-        <tr style="border-bottom: 1px solid #e1e4e8;">
-          <td style="padding: 12px 0; font-weight: 600;">Strike Card</td>
-          <td style="padding: 12px 0; color: #57606a; font-family: monospace;">/api/strike/:username</td>
+      <h2>Environment Variables</h2>
+      <table class="env-table">
+        <tr>
+          <th>Variable</th>
+          <th>Required</th>
+          <th>Description</th>
         </tr>
         <tr>
-          <td style="padding: 12px 0; font-weight: 600;">Flukebase Card</td>
-          <td style="padding: 12px 0; color: #57606a; font-family: monospace;">/api/flukebase/:username</td>
+          <td><code>GITHUB_TOKEN</code></td>
+          <td><span class="badge required">Required</span></td>
+          <td>GitHub Personal Access Token for fetching your stats</td>
+        </tr>
+        <tr>
+          <td><code>FLUKEBASE_API_KEY</code></td>
+          <td><span class="badge optional">Optional</span></td>
+          <td>Flukebase API key for project collaboration stats</td>
+        </tr>
+        <tr>
+          <td><code>PORT</code></td>
+          <td><span class="badge optional">Optional</span></td>
+          <td>Server port (default: 3000)</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Add to README -->
+    <div class="card">
+      <h2>Add to Your README</h2>
+      <p>Once deployed, add this to your GitHub profile README:</p>
+
+      <div class="input-group">
+        <label for="deployed-url">Your Deployed URL</label>
+        <input type="text" id="deployed-url" placeholder="https://your-app.vercel.app" value="https://github-strike.flukebase.me">
+        <small>Enter the URL where you deployed GitHub Strike</small>
+      </div>
+
+      <div class="input-group">
+        <label for="github-username">GitHub Username</label>
+        <input type="text" id="github-username" placeholder="your-username" value="cancelei">
+      </div>
+
+      <div class="tabs" style="margin-top: 20px;">
+        <button class="tab active" data-format="markdown">Markdown</button>
+        <button class="tab" data-format="html">HTML</button>
+      </div>
+
+      <div class="code-block wrap">
+        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+        <code id="readme-code">![GitHub Strike](https://github-strike.flukebase.me/api/strike/cancelei)</code>
+      </div>
+
+      <div class="preview" id="live-preview">
+        <img id="preview-img" src="/api/strike/cancelei" alt="GitHub Strike Card">
+      </div>
+    </div>
+
+    <!-- Available Endpoints -->
+    <div class="card">
+      <h2>Available Endpoints</h2>
+      <table class="env-table">
+        <tr>
+          <th>Endpoint</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td><code>/api/strike/:username</code></td>
+          <td>Main stats card with Strike rank</td>
+        </tr>
+        <tr>
+          <td><code>/api/languages/:username</code></td>
+          <td>Top programming languages breakdown</td>
+        </tr>
+        <tr>
+          <td><code>/api/achievements/:username</code></td>
+          <td>Achievement bolts and badges</td>
+        </tr>
+        <tr>
+          <td><code>/api/streak/:username</code></td>
+          <td>Contribution streak stats</td>
+        </tr>
+        <tr>
+          <td><code>/api/timeline/:username</code></td>
+          <td>Contribution timeline graph</td>
+        </tr>
+        <tr>
+          <td><code>/api/flukebase/:username</code></td>
+          <td>Flukebase project stats (requires API key)</td>
+        </tr>
+        <tr>
+          <td><code>/api/health</code></td>
+          <td>Health check endpoint</td>
+        </tr>
+      </table>
+
+      <h3>Query Parameters</h3>
+      <p>All endpoints support these optional parameters:</p>
+      <table class="env-table">
+        <tr>
+          <th>Parameter</th>
+          <th>Values</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td><code>theme</code></td>
+          <td>electric, midnight, aurora, ember, frost, neon, sunset, ocean, forest, cyber</td>
+          <td>Card color theme</td>
         </tr>
       </table>
     </div>
@@ -228,70 +542,57 @@
   </div>
 
   <script>
-    const usernameInput = document.getElementById('username');
-    const strikeImg = document.getElementById('strike-img');
-    const flukebaseImg = document.getElementById('flukebase-img');
-    const flukebasePreview = document.getElementById('flukebase-preview');
-    const includeFlukebase = document.getElementById('include-flukebase');
-    const codeOutput = document.getElementById('code-output');
-    const tabs = document.querySelectorAll('.tab');
+    // Deployment tabs
+    const deployTabs = document.querySelectorAll('[data-deploy]');
+    const deployOptions = document.querySelectorAll('.deploy-options');
 
-    let currentTab = 'markdown';
-
-    function updatePreview() {
-      const username = usernameInput.value.trim() || 'cancelei';
-
-      strikeImg.src = `/api/strike/${username}`;
-      flukebaseImg.src = `/api/flukebase/${username}`;
-      flukebasePreview.style.display = includeFlukebase.checked ? 'block' : 'none';
-
-      updateCode();
-    }
-
-    function updateCode() {
-      const username = usernameInput.value.trim() || 'cancelei';
-      const baseUrl = 'https://github-strike.flukebase.me';
-
-      let code = '';
-
-      if (currentTab === 'markdown') {
-        code = `![GitHub Strike](${baseUrl}/api/strike/${username})`;
-        if (includeFlukebase.checked) {
-          code += `\n\n![Flukebase](${baseUrl}/api/flukebase/${username})`;
-        }
-      } else {
-        code = `<a href="${baseUrl}">\n  <img src="${baseUrl}/api/strike/${username}" alt="GitHub Strike" />\n</a>`;
-        if (includeFlukebase.checked) {
-          code += `\n\n<a href="https://flukebase.me">\n  <img src="${baseUrl}/api/flukebase/${username}" alt="Flukebase" />\n</a>`;
-        }
-      }
-
-      codeOutput.textContent = code;
-    }
-
-    function copyCode() {
-      const btn = document.querySelector('.copy-btn');
-      navigator.clipboard.writeText(codeOutput.textContent).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = 'Copy';
-          btn.classList.remove('copied');
-        }, 2000);
-      });
-    }
-
-    usernameInput.addEventListener('input', debounce(updatePreview, 500));
-    includeFlukebase.addEventListener('change', updatePreview);
-
-    tabs.forEach(tab => {
+    deployTabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
+        deployTabs.forEach(t => t.classList.remove('active'));
+        deployOptions.forEach(o => o.classList.remove('active'));
         tab.classList.add('active');
-        currentTab = tab.dataset.tab;
-        updateCode();
+        document.getElementById('deploy-' + tab.dataset.deploy).classList.add('active');
       });
     });
+
+    // Format tabs
+    const formatTabs = document.querySelectorAll('[data-format]');
+    let currentFormat = 'markdown';
+
+    formatTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        formatTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFormat = tab.dataset.format;
+        updateReadmeCode();
+      });
+    });
+
+    // README code generator
+    const deployedUrlInput = document.getElementById('deployed-url');
+    const githubUsernameInput = document.getElementById('github-username');
+    const readmeCode = document.getElementById('readme-code');
+    const previewImg = document.getElementById('preview-img');
+
+    function updateReadmeCode() {
+      const url = deployedUrlInput.value.trim().replace(/\/$/, '') || 'https://your-app.vercel.app';
+      const username = githubUsernameInput.value.trim() || 'your-username';
+      const strikeUrl = `${url}/api/strike/${username}`;
+
+      if (currentFormat === 'markdown') {
+        readmeCode.textContent = `![GitHub Strike](${strikeUrl})`;
+      } else {
+        readmeCode.textContent = `<a href="${url}">\n  <img src="${strikeUrl}" alt="GitHub Strike" />\n</a>`;
+      }
+
+      // Update preview if using the demo server
+      if (url.includes('github-strike.flukebase.me')) {
+        previewImg.src = `/api/strike/${username}`;
+      }
+    }
+
+    deployedUrlInput.addEventListener('input', updateReadmeCode);
+    githubUsernameInput.addEventListener('input', debounce(updateReadmeCode, 300));
 
     function debounce(fn, delay) {
       let timeout;
@@ -299,6 +600,19 @@
         clearTimeout(timeout);
         timeout = setTimeout(() => fn.apply(this, args), delay);
       };
+    }
+
+    // Copy to clipboard
+    function copyToClipboard(btn) {
+      const code = btn.parentElement.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
     }
   </script>
 </body>
