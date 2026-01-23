@@ -210,13 +210,54 @@ npm run dev
 
 The server will start at `http://localhost:3000`.
 
-### Deploy to Vercel
+### Deploy with CapRover (Recommended)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cancelei/github_strike)
+GitHub Strike is optimized for [CapRover](https://caprover.com/) deployment.
 
-1. Click the button above
-2. Add your `GITHUB_TOKEN` as an environment variable
-3. Deploy!
+**Option 1: Deploy via Git**
+
+```bash
+# Add your CapRover app as a remote
+git remote add caprover captain@your-caprover-server:github-strike
+
+# Push to deploy
+git push caprover master
+```
+
+**Option 2: Deploy via CLI**
+
+```bash
+# Install CapRover CLI
+npm install -g caprover
+
+# Login to your server
+caprover login
+
+# Deploy
+caprover deploy
+```
+
+**Option 3: Deploy via tarball**
+
+```bash
+# Create deployment archive
+tar -cvf deploy.tar --exclude='node_modules' --exclude='.git' .
+
+# Upload via CapRover dashboard or CLI
+caprover deploy -t ./deploy.tar
+```
+
+**Environment Variables in CapRover:**
+
+In your CapRover dashboard, go to your app's settings and add:
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `GITHUB_TOKEN` | GitHub Personal Access Token | Recommended |
+| `FLUKEBASE_API_KEY` | Flukebase.me API Key | Optional |
+| `FLUKEBASE_API_URL` | Flukebase API URL | Optional |
+
+**Enable HTTPS:** In CapRover dashboard, enable "Force HTTPS" and configure your domain.
 
 ### Deploy with Docker
 
@@ -225,8 +266,19 @@ The server will start at `http://localhost:3000`.
 docker build -t github-strike .
 
 # Run the container
-docker run -p 3000:3000 -e GITHUB_TOKEN=your_token github-strike
+docker run -p 3000:3000 \
+  -e GITHUB_TOKEN=your_token \
+  -e FLUKEBASE_API_KEY=your_key \
+  github-strike
 ```
+
+### Deploy to Vercel (Alternative)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/cancelei/github_strike)
+
+1. Click the button above
+2. Add your `GITHUB_TOKEN` as an environment variable
+3. Deploy!
 
 ## API Reference
 

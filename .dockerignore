@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build output (we build in Docker)
+dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Vercel (not needed for CapRover)
+.vercel
+vercel.json
+
+# Documentation and misc
+README.md
+LICENSE
+*.md
+
+# Tests (not needed in production image)
+tests/
+jest.config.js
