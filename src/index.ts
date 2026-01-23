@@ -51,11 +51,11 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({ error: 'Internal server error' });
 });
 
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`⚡ GitHub Strike running at http://localhost:${PORT}`);
-    console.log(`📊 API endpoints available at http://localhost:${PORT}/api`);
-  });
-}
+const HOST = process.env.HOST || '0.0.0.0';
+
+app.listen(Number(PORT), HOST, () => {
+  console.log(`⚡ GitHub Strike running at http://${HOST}:${PORT}`);
+  console.log(`📊 API endpoints available at http://${HOST}:${PORT}/api`);
+});
 
 export default app;
