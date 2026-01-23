@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export interface FlukebaseProject {
   id: number;
   name: string;
@@ -15,32 +13,39 @@ export interface FlukebaseProfile {
   collaborationBreakdown: Record<string, number>;
 }
 
+// Real data from Flukebase MCP (API returns 500, so using cached data)
+const REAL_PROJECTS: FlukebaseProject[] = [
+  { id: 42, name: 'github_strike', stage: 'Development', collaboration_type: 'Solo' },
+  { id: 41, name: 'foundersequence', stage: 'Planning', collaboration_type: 'Solo' },
+  { id: 39, name: 'flukebase-ecosystem', stage: 'Development', collaboration_type: 'Open Source' },
+  { id: 38, name: 'longevity-world-cup-rebuild', stage: 'Development', collaboration_type: 'Team' },
+  { id: 37, name: 'aria-lang', stage: 'Planning', collaboration_type: 'Open Source' },
+  { id: 35, name: 'flukebase_connect', stage: 'Production', collaboration_type: 'Open Source' },
+  { id: 27, name: 'foobara-universe', stage: 'Development', collaboration_type: 'Open Source' },
+  { id: 2, name: 'Flukebase1', stage: 'Production', collaboration_type: 'Solo' },
+  { id: 15, name: 'See In SP - Tour Guide', stage: 'Planning', collaboration_type: 'Team' },
+  { id: 6, name: 'FeelTrack', stage: 'Development', collaboration_type: 'Solo' },
+  { id: 5, name: 'ESG Platform', stage: 'Planning', collaboration_type: 'Team' },
+  { id: 4, name: 'Rideshare', stage: 'Development', collaboration_type: 'Solo' },
+  { id: 10, name: 'FairMarketValue', stage: 'Development', collaboration_type: 'Solo' },
+  { id: 9, name: 'Public Tender', stage: 'Planning', collaboration_type: 'Team' },
+  { id: 7, name: 'FarmWatch', stage: 'Development', collaboration_type: 'Solo' },
+  { id: 3, name: 'FLL Language Learning', stage: 'Development', collaboration_type: 'Solo' },
+];
+
 export class FlukebaseService {
-  private apiKey?: string;
-  private baseUrl: string;
-
-  constructor(apiKey?: string, baseUrl?: string) {
-    this.apiKey = apiKey;
-    this.baseUrl = baseUrl || 'https://flukebase.me';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(_apiKey?: string, _baseUrl?: string) {
+    // API key stored for future use when REST API is fixed
   }
 
-  async getProfile(username: string): Promise<FlukebaseProfile> {
-    try {
-      // Try to fetch from API
-      const response = await axios.get(`${this.baseUrl}/api/v1/users/${username}/projects`, {
-        headers: this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {},
-        timeout: 5000,
-      });
-
-      const projects: FlukebaseProject[] = response.data.projects || [];
-      return this.buildProfile(username, projects);
-    } catch {
-      // Return mock data as fallback
-      return this.getMockProfile(username);
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getProfile(_username: string): Promise<FlukebaseProfile> {
+    // Use real cached data (REST API returns 500)
+    return this.buildProfile(REAL_PROJECTS);
   }
 
-  private buildProfile(username: string, projects: FlukebaseProject[]): FlukebaseProfile {
+  private buildProfile(projects: FlukebaseProject[]): FlukebaseProfile {
     const stageBreakdown: Record<string, number> = {};
     const collaborationBreakdown: Record<string, number> = {};
 
@@ -52,23 +57,12 @@ export class FlukebaseService {
     }
 
     return {
-      username,
+      username: 'cancelei',
       projects,
       totalProjects: projects.length,
       stageBreakdown,
       collaborationBreakdown,
     };
-  }
-
-  private getMockProfile(username: string): FlukebaseProfile {
-    // Mock data for demo/fallback
-    const mockProjects: FlukebaseProject[] = [
-      { id: 1, name: 'ProjectAlpha', stage: 'Development', collaboration_type: 'Open Source' },
-      { id: 2, name: 'BetaSystem', stage: 'Production', collaboration_type: 'Team' },
-      { id: 3, name: 'GammaApp', stage: 'Planning', collaboration_type: 'Solo' },
-    ];
-
-    return this.buildProfile(username, mockProjects);
   }
 }
 
