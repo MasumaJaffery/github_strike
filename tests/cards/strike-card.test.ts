@@ -137,8 +137,8 @@ describe('Strike Card', () => {
         { user: mockUser, stats: mockStats },
         { width: 600, height: 250 }
       );
-      expect(svg).toContain('width="600"');
-      expect(svg).toContain('height="250"');
+      expect(svg).toContain('max-width: 600px');
+      expect(svg).toMatch(/viewBox="0 0 \d+ 250"/);
     });
 
     it('should hide specified stats', () => {
@@ -173,8 +173,8 @@ describe('Strike Card', () => {
     it('should generate a compact SVG', () => {
       const svg = generateCompactStrikeCard({ user: mockUser, stats: mockStats });
       expect(svg).toContain('<svg');
-      expect(svg).toContain('width="400"');
-      expect(svg).toContain('height="120"');
+      expect(svg).toContain('max-width: 400px');
+      expect(svg).toMatch(/viewBox="0 0 \d+ 120"/);
     });
 
     it('should include username', () => {

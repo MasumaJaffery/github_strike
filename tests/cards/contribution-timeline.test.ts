@@ -71,8 +71,8 @@ describe('Contribution Timeline', () => {
 
     it('should apply custom dimensions', () => {
       const svg = generateContributionTimeline(mockCalendar, { width: 900, height: 200 });
-      expect(svg).toContain('width="900"');
-      expect(svg).toContain('height="200"');
+      expect(svg).toContain('max-width: 900px');
+      expect(svg).toMatch(/viewBox="0 0 \d+ 200"/);
     });
 
     it('should disable animations when requested', () => {
@@ -118,8 +118,8 @@ describe('Contribution Timeline', () => {
 
     it('should apply custom dimensions', () => {
       const svg = generateStreakCard(mockCalendar, 15, 45, { width: 500, height: 180 });
-      expect(svg).toContain('width="500"');
-      expect(svg).toContain('height="180"');
+      expect(svg).toContain('max-width: 500px');
+      expect(svg).toMatch(/viewBox="0 0 \d+ 180"/);
     });
   });
 });
