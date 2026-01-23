@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { FlukebaseProject, FlukebaseStats } from '../types';
 
-const FLUKEBASE_API = process.env.FLUKEBASE_API_URL || 'https://api.flukebase.me';
+// Default to flukebase.me API with full path to Connect API
+const FLUKEBASE_API = process.env.FLUKEBASE_API_URL || 'https://flukebase.me/api/v1/flukebase_connect';
 
 export interface FlukebaseUser {
   id: number;
@@ -65,7 +66,8 @@ export class FlukebaseService {
       const response = await axios.get(`${this.baseUrl}/users/${username}/projects`, {
         headers: this.headers,
       });
-      return response.data;
+      // API returns { projects: [...], meta: {...} }
+      return response.data.projects || response.data;
     } catch (error) {
       return this.getMockProjects(username);
     }
@@ -76,7 +78,8 @@ export class FlukebaseService {
       const response = await axios.get(`${this.baseUrl}/users/${username}/collaborations`, {
         headers: this.headers,
       });
-      return response.data;
+      // API returns { collaborations: [...], meta: {...} }
+      return response.data.collaborations || response.data;
     } catch (error) {
       return this.getMockCollaborations();
     }
