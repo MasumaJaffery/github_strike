@@ -186,10 +186,6 @@
           <input type="checkbox" id="include-flukebase">
           <span>Include Flukebase Card <span class="badge optional">Optional</span></span>
         </label>
-        <label class="option">
-          <input type="checkbox" id="compact-mode">
-          <span>Compact Mode</span>
-        </label>
       </div>
 
       <div class="preview" id="flukebase-preview" style="display: none;">
@@ -219,10 +215,6 @@
           <td style="padding: 12px 0; font-weight: 600;">Strike Card</td>
           <td style="padding: 12px 0; color: #57606a; font-family: monospace;">/api/strike/:username</td>
         </tr>
-        <tr style="border-bottom: 1px solid #e1e4e8;">
-          <td style="padding: 12px 0; font-weight: 600;">Strike Card (Compact)</td>
-          <td style="padding: 12px 0; color: #57606a; font-family: monospace;">/api/strike/:username?compact=true</td>
-        </tr>
         <tr>
           <td style="padding: 12px 0; font-weight: 600;">Flukebase Card</td>
           <td style="padding: 12px 0; color: #57606a; font-family: monospace;">/api/flukebase/:username</td>
@@ -241,7 +233,6 @@
     const flukebaseImg = document.getElementById('flukebase-img');
     const flukebasePreview = document.getElementById('flukebase-preview');
     const includeFlukebase = document.getElementById('include-flukebase');
-    const compactMode = document.getElementById('compact-mode');
     const codeOutput = document.getElementById('code-output');
     const tabs = document.querySelectorAll('.tab');
 
@@ -249,9 +240,8 @@
 
     function updatePreview() {
       const username = usernameInput.value.trim() || 'cancelei';
-      const compact = compactMode.checked ? '?compact=true' : '';
 
-      strikeImg.src = `/api/strike/${username}${compact}`;
+      strikeImg.src = `/api/strike/${username}`;
       flukebaseImg.src = `/api/flukebase/${username}`;
       flukebasePreview.style.display = includeFlukebase.checked ? 'block' : 'none';
 
@@ -260,18 +250,17 @@
 
     function updateCode() {
       const username = usernameInput.value.trim() || 'cancelei';
-      const compact = compactMode.checked ? '?compact=true' : '';
       const baseUrl = 'https://github-strike.flukebase.me';
 
       let code = '';
 
       if (currentTab === 'markdown') {
-        code = `![GitHub Strike](${baseUrl}/api/strike/${username}${compact})`;
+        code = `![GitHub Strike](${baseUrl}/api/strike/${username})`;
         if (includeFlukebase.checked) {
           code += `\n\n![Flukebase](${baseUrl}/api/flukebase/${username})`;
         }
       } else {
-        code = `<a href="${baseUrl}">\n  <img src="${baseUrl}/api/strike/${username}${compact}" alt="GitHub Strike" />\n</a>`;
+        code = `<a href="${baseUrl}">\n  <img src="${baseUrl}/api/strike/${username}" alt="GitHub Strike" />\n</a>`;
         if (includeFlukebase.checked) {
           code += `\n\n<a href="https://flukebase.me">\n  <img src="${baseUrl}/api/flukebase/${username}" alt="Flukebase" />\n</a>`;
         }
@@ -294,7 +283,6 @@
 
     usernameInput.addEventListener('input', debounce(updatePreview, 500));
     includeFlukebase.addEventListener('change', updatePreview);
-    compactMode.addEventListener('change', updatePreview);
 
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
