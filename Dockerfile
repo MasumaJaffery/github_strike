@@ -34,6 +34,9 @@ RUN npm ci --omit=dev && npm cache clean --force
 # Copy built files from builder
 COPY --from=builder /app/dist ./dist
 
+# Copy public assets
+COPY public ./public
+
 # Set ownership
 RUN chown -R nodejs:nodejs /app
 

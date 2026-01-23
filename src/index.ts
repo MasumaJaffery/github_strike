@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import dotenv from 'dotenv';
 import routes from './api/routes';
 
@@ -9,17 +10,12 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Serve index.html at root
 app.get('/', (_req, res) => {
-  res.json({
-    name: 'GitHub Strike',
-    version: '1.0.0',
-    description: 'GitHub developer stats visualization',
-    endpoints: {
-      strike: '/api/strike/:username',
-      flukebase: '/api/flukebase/:username',
-      health: '/api/health',
-    },
-  });
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.use('/api', routes);

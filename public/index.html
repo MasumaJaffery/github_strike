@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Strike - Developer Stats for Your README</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f6f8fa;
+      color: #24292f;
+      line-height: 1.6;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      color: #24292f;
+    }
+    h1 span { color: #fb8c00; }
+    .subtitle {
+      font-size: 1.1rem;
+      color: #57606a;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e1e4e8;
+    }
+
+    .preview {
+      background: #f6f8fa;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .preview img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #24292f;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 1rem;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #fff;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: #0969da;
+      box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
+    }
+
+    .code-block {
+      background: #24292f;
+      color: #e6edf3;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      position: relative;
+    }
+    .code-block code {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #57606a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover { background: #6e7681; }
+    .copy-btn.copied { background: #198754; }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      padding: 8px 16px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .tab.active {
+      background: #0969da;
+      color: #fff;
+      border-color: #0969da;
+    }
+
+    .options {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #e1e4e8;
+      color: #57606a;
+    }
+    footer a { color: #0969da; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+    .badge.optional { background: #ddf4ff; color: #0969da; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span>&#9889;</span> GitHub Strike</h1>
+      <p class="subtitle">Beautiful developer stats cards for your GitHub README</p>
+    </header>
+
+    <div class="card">
+      <h2>Try It Out</h2>
+      <div class="input-group">
+        <label for="username">GitHub Username</label>
+        <input type="text" id="username" placeholder="Enter your GitHub username" value="cancelei">
+      </div>
+
+      <div class="preview" id="strike-preview">
+        <img id="strike-img" src="/api/strike/cancelei" alt="GitHub Strike Card">
+      </div>
+
+      <div class="options">
+        <label class="option">
+          <input type="checkbox" id="include-flukebase">
+          <span>Include Flukebase Card <span class="badge optional">Optional</span></span>
+        </label>
+        <label class="option">
+          <input type="checkbox" id="compact-mode">
+          <span>Compact Mode</span>
+        </label>
+      </div>
+
+      <div class="preview" id="flukebase-preview" style="display: none;">
+        <img id="flukebase-img" src="/api/flukebase/cancelei" alt="Flukebase Card">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Add to Your README</h2>
+      <p style="margin-bottom: 16px; color: #57606a;">Copy this markdown and paste it into your GitHub profile README:</p>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="markdown">Markdown</button>
+        <button class="tab" data-tab="html">HTML</button>
+      </div>
+
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode()">Copy</button>
+        <code id="code-output">![GitHub Strike](https://github-strike.flukebase.me/api/strike/cancelei)</code>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Available Endpoints</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #e1e4e8;">
+          <td style="padding: 12px 0; font-weight: 600;">Strike Card</td>
+          <td style="padding: 12px 0; color: #57606a; font-family: monospace;">/api/strike/:username</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #e1e4e8;">
+          <td style="padding: 12px 0; font-weight: 600;">Strike Card (Compact)</td>
+          <td style="padding: 12px 0; color: #57606a; font-family: monospace;">/api/strike/:username?compact=true</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 0; font-weight: 600;">Flukebase Card</td>
+          <td style="padding: 12px 0; color: #57606a; font-family: monospace;">/api/flukebase/:username</td>
+        </tr>
+      </table>
+    </div>
+
+    <footer>
+      <p>Built with <a href="https://flukebase.me">Flukebase</a> | <a href="https://github.com/cancelei/github_strike">View on GitHub</a></p>
+    </footer>
+  </div>
+
+  <script>
+    const usernameInput = document.getElementById('username');
+    const strikeImg = document.getElementById('strike-img');
+    const flukebaseImg = document.getElementById('flukebase-img');
+    const flukebasePreview = document.getElementById('flukebase-preview');
+    const includeFlukebase = document.getElementById('include-flukebase');
+    const compactMode = document.getElementById('compact-mode');
+    const codeOutput = document.getElementById('code-output');
+    const tabs = document.querySelectorAll('.tab');
+
+    let currentTab = 'markdown';
+
+    function updatePreview() {
+      const username = usernameInput.value.trim() || 'cancelei';
+      const compact = compactMode.checked ? '?compact=true' : '';
+
+      strikeImg.src = `/api/strike/${username}${compact}`;
+      flukebaseImg.src = `/api/flukebase/${username}`;
+      flukebasePreview.style.display = includeFlukebase.checked ? 'block' : 'none';
+
+      updateCode();
+    }
+
+    function updateCode() {
+      const username = usernameInput.value.trim() || 'cancelei';
+      const compact = compactMode.checked ? '?compact=true' : '';
+      const baseUrl = 'https://github-strike.flukebase.me';
+
+      let code = '';
+
+      if (currentTab === 'markdown') {
+        code = `![GitHub Strike](${baseUrl}/api/strike/${username}${compact})`;
+        if (includeFlukebase.checked) {
+          code += `\n\n![Flukebase](${baseUrl}/api/flukebase/${username})`;
+        }
+      } else {
+        code = `<a href="${baseUrl}">\n  <img src="${baseUrl}/api/strike/${username}${compact}" alt="GitHub Strike" />\n</a>`;
+        if (includeFlukebase.checked) {
+          code += `\n\n<a href="https://flukebase.me">\n  <img src="${baseUrl}/api/flukebase/${username}" alt="Flukebase" />\n</a>`;
+        }
+      }
+
+      codeOutput.textContent = code;
+    }
+
+    function copyCode() {
+      const btn = document.querySelector('.copy-btn');
+      navigator.clipboard.writeText(codeOutput.textContent).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    usernameInput.addEventListener('input', debounce(updatePreview, 500));
+    includeFlukebase.addEventListener('change', updatePreview);
+    compactMode.addEventListener('change', updatePreview);
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentTab = tab.dataset.tab;
+        updateCode();
+      });
+    });
+
+    function debounce(fn, delay) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+  </script>
+</body>
+</html>
