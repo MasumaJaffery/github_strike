@@ -1,5 +1,5 @@
 import { GitHubStats, GitHubUser, CardOptions, StrikeRank, ThemeColors } from '../types';
-import { getTheme, mergeTheme } from '../themes';
+import { mergeTheme } from '../themes';
 import { createSvgWrapper, createIcon, createText, formatNumber, createProgressBar } from '../utils/svg';
 
 interface StrikeCardData {

@@ -27,9 +27,9 @@ describe('SVG Utils', () => {
     it('should create valid SVG structure', () => {
       const svg = createSvgWrapper('<rect/>', 400, 200, mockTheme);
       expect(svg).toContain('<svg');
-      expect(svg).toContain('width="100%"');
+      expect(svg).toContain('width="400"');
+      expect(svg).toContain('height="200"');
       expect(svg).toContain('viewBox="0 0 400 200"');
-      expect(svg).toContain('max-width: 400px');
       expect(svg).toContain('</svg>');
     });
 

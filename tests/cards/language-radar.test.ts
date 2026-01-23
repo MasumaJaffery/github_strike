@@ -96,7 +96,7 @@ describe('Language Card', () => {
 
     it('should apply custom dimensions', () => {
       const svg = generateLanguageCard(mockLanguages, { width: 500, height: 400 });
-      expect(svg).toContain('max-width: 500px');
+      expect(svg).toContain('width="500"');
       expect(svg).toMatch(/viewBox="0 0 \d+ 400"/);
     });
   });

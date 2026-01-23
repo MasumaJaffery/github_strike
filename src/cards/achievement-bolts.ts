@@ -1,5 +1,5 @@
 import { GitHubStats, Achievement, CardOptions } from '../types';
-import { getTheme, mergeTheme } from '../themes';
+import { mergeTheme } from '../themes';
 import { createSvgWrapper, createText, formatNumber } from '../utils/svg';
 
 const ACHIEVEMENT_DEFINITIONS: Array<{
@@ -120,7 +120,6 @@ export function calculateAchievements(stats: GitHubStats): Achievement[] {
   return ACHIEVEMENT_DEFINITIONS.map((def) => {
     const result = def.check(stats);
     let tier: Achievement['tier'] = 'bronze';
-    let progress = result.progress;
 
     if (result.unlocked) {
       const tierOrder: Achievement['tier'][] = ['diamond', 'platinum', 'gold', 'silver', 'bronze'];

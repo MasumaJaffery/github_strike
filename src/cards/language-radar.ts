@@ -1,5 +1,5 @@
 import { LanguageStats, CardOptions } from '../types';
-import { getTheme, mergeTheme } from '../themes';
+import { mergeTheme } from '../themes';
 import { createSvgWrapper, createText, escapeHtml } from '../utils/svg';
 
 type LayoutType = 'radar' | 'donut' | 'bars' | 'compact';
@@ -163,7 +163,7 @@ function generateDonutLayout(
   const innerRadius = 50;
 
   let currentAngle = -Math.PI / 2;
-  const segments = languages.map(([name, data], i) => {
+  const segments = languages.map(([_name, data], i) => {
     const angle = (data.percentage / 100) * 2 * Math.PI;
     const startAngle = currentAngle;
     const endAngle = currentAngle + angle;
@@ -254,7 +254,7 @@ function generateCompactLayout(
   const barWidth = width - 40;
 
   let currentX = 20;
-  const segments = languages.map(([_, data], i) => {
+  const segments = languages.map(([_name, data], i) => {
     const segmentWidth = (data.percentage / 100) * barWidth;
     const segment = `<rect x="${currentX}" y="${barY}" width="${segmentWidth}" height="${barHeight}" fill="${data.color}" class="${animate ? 'fade-in delay-' + Math.min(i + 1, 5) : ''}"/>`;
     currentX += segmentWidth;

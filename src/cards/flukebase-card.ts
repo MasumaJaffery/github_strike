@@ -1,7 +1,7 @@
 import { FlukebaseProject, FlukebaseStats, CardOptions } from '../types';
 import { CollaborationAgreement, FlukebaseProfile } from '../services/flukebase';
 import { mergeTheme } from '../themes';
-import { createSvgWrapper, createText, formatNumber, createProgressBar } from '../utils/svg';
+import { createSvgWrapper, createText, formatNumber } from '../utils/svg';
 
 interface FlukebaseCardOptions extends CardOptions {
   showProjects?: boolean;

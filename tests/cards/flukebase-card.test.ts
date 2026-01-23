@@ -142,7 +142,7 @@ describe('Flukebase Card', () => {
 
     it('should apply custom dimensions', () => {
       const svg = generateFlukebaseCard(mockProfile, { width: 600, height: 350 });
-      expect(svg).toContain('max-width: 600px');
+      expect(svg).toContain('width="600"');
       expect(svg).toMatch(/viewBox="0 0 \d+ 350"/);
     });
   });
@@ -192,7 +192,7 @@ describe('Flukebase Card', () => {
 
     it('should apply custom dimensions', () => {
       const svg = generateFlukebaseStatsCard(mockStats, { width: 400, height: 200 });
-      expect(svg).toContain('max-width: 400px');
+      expect(svg).toContain('width="400"');
       expect(svg).toMatch(/viewBox="0 0 \d+ 200"/);
     });
   });

@@ -108,7 +108,7 @@ export class FlukebaseService {
     };
   }
 
-  private getMockProjects(username: string): FlukebaseProject[] {
+  private getMockProjects(_username: string): FlukebaseProject[] {
     return [
       {
         id: 1,

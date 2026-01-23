@@ -1,5 +1,5 @@
 import { ContributionCalendar, CardOptions } from '../types';
-import { getTheme, mergeTheme } from '../themes';
+import { mergeTheme } from '../themes';
 import { createSvgWrapper, createText } from '../utils/svg';
 
 interface TimelineCardOptions extends CardOptions {
