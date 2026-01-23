@@ -94,7 +94,7 @@ export function generateContributionTimeline(
   `;
 
   const header = `
-    <g class="fade-in">
+    <g >
       ${createText('Contribution Timeline', 20, 25, { color: theme.text, size: 16, weight: 'bold' })}
       ${createText(`${calendar.totalContributions.toLocaleString()} contributions in the last year`, width - 20, 25, {
         color: theme.textSecondary,
@@ -190,33 +190,33 @@ export function generateStreakCard(
   });
 
   const content = `
-    <!-- Header -->
-    <g class="fade-in">
+    
+    <g >
       ${createStreakIcon(20, 15, 28, theme.accent)}
       ${createText('Contribution Streak', 55, 35, { color: theme.text, size: 16, weight: 'bold' })}
     </g>
 
-    <!-- Current Streak -->
-    <g class="fade-in delay-1" transform="translate(30, 60)">
+    
+    <g  transform="translate(30, 60)">
       <text fill="${theme.accent}" font-size="48" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" class="${animate ? 'glow' : ''}">${currentStreak}</text>
       ${createText('days', 85, 30, { color: theme.textSecondary, size: 14 })}
       ${createText('Current Streak', 0, 55, { color: theme.textSecondary, size: 11 })}
     </g>
 
-    <!-- Longest Streak -->
-    <g class="fade-in delay-2" transform="translate(180, 60)">
+    
+    <g  transform="translate(180, 60)">
       <text fill="${theme.icon}" font-size="32" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">${longestStreak}</text>
       ${createText('days', 55, 22, { color: theme.textSecondary, size: 12 })}
       ${createText('Longest Streak', 0, 45, { color: theme.textSecondary, size: 11 })}
     </g>
 
-    <!-- Total Contributions -->
-    <g class="fade-in delay-3" transform="translate(300, 60)">
+    
+    <g  transform="translate(300, 60)">
       <text fill="${theme.text}" font-size="28" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">${formatContributions(calendar.totalContributions)}</text>
       ${createText('This Year', 0, 45, { color: theme.textSecondary, size: 11 })}
     </g>
 
-    <!-- Date -->
+    
     ${createText(dateStr, width - 20, height - 15, { color: theme.textSecondary, size: 10, anchor: 'end' })}
   `;
 

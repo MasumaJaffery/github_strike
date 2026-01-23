@@ -7,42 +7,56 @@ export function createSvgWrapper(
   theme: ThemeColors,
   options: { animate?: boolean; borderRadius?: number; showBorder?: boolean; title?: string } = {}
 ): string {
-  const { animate = true, borderRadius = 12, showBorder = true, title = 'GitHub Strike Card' } = options;
-
-  // GitHub-compatible styles - NO animations that could leave elements invisible
-  // GitHub's camo proxy may strip CSS animations, so all elements must be visible by default
-  const styles = `
-    <style>
-      /* Empty classes for compatibility - no opacity changes */
-      .fade-in, .delay-1, .delay-2, .delay-3, .delay-4, .delay-5 { }
-      .pulse { }
-      .strike-path { }
-      .glow { }
-    </style>
-  `;
+  const { borderRadius = 12, showBorder = true, title = 'GitHub Strike Card' } = options;
 
   const border = showBorder
     ? `stroke="${theme.border}" stroke-width="1"`
     : '';
 
-  // Use explicit xmlns and add role/aria for GitHub compatibility
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" role="img" aria-labelledby="titleId">
-<title id="titleId">${escapeHtml(title)}</title>
-<defs>
-<linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" stop-color="${theme.background}"/>
-<stop offset="50%" stop-color="${adjustColor(theme.background, 10)}"/>
-<stop offset="100%" stop-color="${theme.background}"/>
-</linearGradient>
-<linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-<stop offset="0%" stop-color="${theme.accent}"/>
-<stop offset="100%" stop-color="${adjustColor(theme.accent, 20)}"/>
-</linearGradient>
-</defs>
-${styles}
-<rect x="0.5" y="0.5" rx="${borderRadius}" ry="${borderRadius}" width="${width - 1}" height="${height - 1}" fill="url(#bgGradient)" ${border}/>
-${content}
-</svg>`;
+  // Match github-readme-stats structure exactly for maximum compatibility
+  // Key: leading whitespace, specific attribute order, no comments in output
+  return `
+    <svg
+      width="${width}"
+      height="${height}"
+      viewBox="0 0 ${width} ${height}"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-labelledby="descId"
+    >
+      <title id="titleId">${escapeHtml(title)}</title>
+      <desc id="descId">${escapeHtml(title)}</desc>
+      <style>
+        .header { font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif; }
+        .stat { font: 600 14px 'Segoe UI', Ubuntu, Sans-Serif; }
+        .bold { font-weight: 700; }
+      </style>
+      <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${theme.background}"/>
+          <stop offset="50%" stop-color="${adjustColor(theme.background, 10)}"/>
+          <stop offset="100%" stop-color="${theme.background}"/>
+        </linearGradient>
+        <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="${theme.accent}"/>
+          <stop offset="100%" stop-color="${adjustColor(theme.accent, 20)}"/>
+        </linearGradient>
+      </defs>
+      <rect
+        data-testid="card-bg"
+        x="0.5"
+        y="0.5"
+        rx="${borderRadius}"
+        ry="${borderRadius}"
+        height="${height - 1}"
+        width="${width - 1}"
+        fill="url(#bgGradient)"
+        ${border}
+      />
+      ${content}
+    </svg>
+  `.trim();
 }
 
 export function adjustColor(hex: string, percent: number): string {

@@ -65,43 +65,36 @@ export function generateStrikeCard(data: StrikeCardData, options: CardOptions = 
   ].filter((item) => !hideStats.includes(item.key));
 
   const content = `
-    <!-- Title with lightning bolt -->
-    <g class="fade-in">
-      ${createIcon('bolt', 25, 22, 24, theme.accent)}
-      ${createText(`${data.user.name || data.user.login}'s GitHub Strike`, 55, 40, {
-        color: theme.text,
-        size: 18,
-        weight: 'bold',
-      })}
-    </g>
-
-    <!-- Strike Rank Badge -->
-    <g class="fade-in delay-1" transform="translate(${width - 110}, 20)">
-      <rect x="0" y="0" width="90" height="35" rx="17.5" fill="${theme.accent}20" stroke="${theme.accent}" stroke-width="1"/>
-      ${createIcon('bolt', 8, 6, 22, theme.accent)}
-      ${createText(rank.rank, 35, 24, {
-        color: theme.accent,
-        size: 13,
-        weight: 'bold',
-      })}
-    </g>
-
-    <!-- Stats Grid -->
-    ${generateStatsGrid(statItems, theme, animate)}
-
-    <!-- Progress to next rank -->
-    <g class="fade-in delay-5" transform="translate(25, ${height - 35})">
-      ${createText(`Score: ${formatNumber(rank.score)}`, 0, 12, {
-        color: theme.textSecondary,
-        size: 11,
-      })}
-      ${createProgressBar(80, 0, width - 130, 14, rank.percentile, theme)}
-      ${createText(`Top ${100 - rank.percentile}%`, width - 115, 12, {
-        color: theme.textSecondary,
-        size: 11,
-        anchor: 'end',
-      })}
-    </g>
+      <g transform="translate(0, 0)">
+        ${createIcon('bolt', 25, 22, 24, theme.accent)}
+        ${createText(`${data.user.name || data.user.login}'s GitHub Strike`, 55, 40, {
+          color: theme.text,
+          size: 18,
+          weight: 'bold',
+        })}
+      </g>
+      <g transform="translate(${width - 110}, 20)">
+        <rect x="0" y="0" width="90" height="35" rx="17.5" fill="${theme.accent}20" stroke="${theme.accent}" stroke-width="1"/>
+        ${createIcon('bolt', 8, 6, 22, theme.accent)}
+        ${createText(rank.rank, 35, 24, {
+          color: theme.accent,
+          size: 13,
+          weight: 'bold',
+        })}
+      </g>
+      ${generateStatsGrid(statItems, theme)}
+      <g transform="translate(25, ${height - 35})">
+        ${createText(`Score: ${formatNumber(rank.score)}`, 0, 12, {
+          color: theme.textSecondary,
+          size: 11,
+        })}
+        ${createProgressBar(80, 0, width - 130, 14, rank.percentile, theme)}
+        ${createText(`Top ${100 - rank.percentile}%`, width - 115, 12, {
+          color: theme.textSecondary,
+          size: 11,
+          anchor: 'end',
+        })}
+      </g>
   `;
 
   return createSvgWrapper(content, width, height, theme, {
@@ -114,8 +107,7 @@ export function generateStrikeCard(data: StrikeCardData, options: CardOptions = 
 
 function generateStatsGrid(
   stats: Array<{ icon: string; label: string; value: number }>,
-  theme: ThemeColors,
-  animate: boolean
+  theme: ThemeColors
 ): string {
   const startY = 70;
   const colWidth = 230;
@@ -127,10 +119,9 @@ function generateStatsGrid(
       const row = Math.floor(index / 2);
       const x = 25 + col * colWidth;
       const y = startY + row * rowHeight;
-      const delayClass = animate ? `delay-${Math.min(index + 1, 5)}` : '';
 
       return `
-        <g class="fade-in ${delayClass}" transform="translate(${x}, ${y})">
+        <g transform="translate(${x}, ${y})">
           ${createIcon(stat.icon, 0, -12, 18, theme.icon)}
           ${createText(stat.label + ':', 24, 0, {
             color: theme.textSecondary,
@@ -161,35 +152,30 @@ export function generateCompactStrikeCard(data: StrikeCardData, options: CardOpt
   const rank = calculateStrikeRank(data.stats);
 
   const content = `
-    <!-- Header -->
-    <g class="fade-in">
-      ${createIcon('bolt', 15, 15, 20, theme.accent)}
-      ${createText(data.user.login, 40, 30, {
-        color: theme.text,
-        size: 16,
-        weight: 'bold',
-      })}
-      <rect x="${width - 80}" y="12" width="65" height="26" rx="13" fill="${theme.accent}20" stroke="${theme.accent}" stroke-width="1"/>
-      ${createText(rank.rank, width - 47, 30, {
-        color: theme.accent,
-        size: 11,
-        weight: 'bold',
-        anchor: 'middle',
-      })}
-    </g>
-
-    <!-- Compact Stats Row -->
-    <g class="fade-in delay-1" transform="translate(15, 55)">
-      ${createCompactStat(0, 'star', data.stats.totalStars, theme)}
-      ${createCompactStat(90, 'commit', data.stats.totalCommits, theme)}
-      ${createCompactStat(180, 'pr', data.stats.totalPRs, theme)}
-      ${createCompactStat(270, 'streak', data.stats.currentStreak, theme)}
-    </g>
-
-    <!-- Mini progress -->
-    <g class="fade-in delay-2" transform="translate(15, 90)">
-      ${createProgressBar(0, 0, width - 30, 8, rank.percentile, theme)}
-    </g>
+      <g transform="translate(0, 0)">
+        ${createIcon('bolt', 15, 15, 20, theme.accent)}
+        ${createText(data.user.login, 40, 30, {
+          color: theme.text,
+          size: 16,
+          weight: 'bold',
+        })}
+        <rect x="${width - 80}" y="12" width="65" height="26" rx="13" fill="${theme.accent}20" stroke="${theme.accent}" stroke-width="1"/>
+        ${createText(rank.rank, width - 47, 30, {
+          color: theme.accent,
+          size: 11,
+          weight: 'bold',
+          anchor: 'middle',
+        })}
+      </g>
+      <g transform="translate(15, 55)">
+        ${createCompactStat(0, 'star', data.stats.totalStars, theme)}
+        ${createCompactStat(90, 'commit', data.stats.totalCommits, theme)}
+        ${createCompactStat(180, 'pr', data.stats.totalPRs, theme)}
+        ${createCompactStat(270, 'streak', data.stats.currentStreak, theme)}
+      </g>
+      <g transform="translate(15, 90)">
+        ${createProgressBar(0, 0, width - 30, 8, rank.percentile, theme)}
+      </g>
   `;
 
   return createSvgWrapper(content, width, height, theme, {

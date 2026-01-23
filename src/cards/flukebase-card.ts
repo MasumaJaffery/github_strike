@@ -46,7 +46,7 @@ export function generateFlukebaseCard(
   const activeCollabs = collaborations.filter((c) => c.status === 'active');
 
   const content = `
-    <!-- Header with Flukebase branding -->
+    
     <g>
       ${createFlukebaseLogo(20, 15, 28, theme.accent)}
       ${createText(`${profile.user.username} on Flukebase`, 55, 35, {
@@ -61,17 +61,17 @@ export function generateFlukebaseCard(
       })}
     </g>
 
-    <!-- Stats Row -->
+    
     <g transform="translate(25, 55)">
       ${generateStatBox(0, 'Projects', stats.totalProjects, theme)}
       ${generateStatBox(150, 'Collabs', stats.activeCollaborations, theme)}
       ${generateStatBox(300, 'Agreements', stats.completedAgreements, theme)}
     </g>
 
-    <!-- Projects Section -->
+    
     ${showProjects ? generateProjectsSection(displayProjects, theme, animate, 25, 120, width - 50) : ''}
 
-    <!-- Collaboration Badges -->
+    
     ${showCollaborations ? generateCollaborationBadges(activeCollabs, theme, animate, 25, height - 45, width - 50) : ''}
   `;
 
@@ -250,14 +250,14 @@ export function generateFlukebaseStatsCard(
     .join('');
 
   const content = `
-    <!-- Header -->
-    <g class="fade-in">
+    
+    <g >
       ${createFlukebaseLogo(15, 12, 22, theme.accent)}
       ${createText('Flukebase Stats', 42, 28, { color: theme.text, size: 14, weight: 'bold' })}
     </g>
 
-    <!-- Main Stats -->
-    <g class="fade-in delay-1" transform="translate(20, 50)">
+    
+    <g  transform="translate(20, 50)">
       ${createText(stats.totalProjects.toString(), 0, 20, { color: theme.accent, size: 24, weight: 'bold' })}
       ${createText('projects', 35, 20, { color: theme.textSecondary, size: 12 })}
 
@@ -268,11 +268,11 @@ export function generateFlukebaseStatsCard(
       ${createText('completed', 210, 20, { color: theme.textSecondary, size: 12 })}
     </g>
 
-    <!-- Stage Distribution Bar -->
+    
     <rect x="20" y="90" width="${width - 40}" height="12" rx="6" fill="${theme.progressBackground}"/>
     ${stageBar}
 
-    <!-- Legend -->
+    
     ${legend}
   `;
 

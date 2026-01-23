@@ -123,19 +123,19 @@ function generateRadarLayout(
     })
     .join('');
 
-  const animateClass = animate ? 'class="strike-path"' : '';
+  const animateClass = animate ? '' : '';
 
   return `
-    <!-- Title -->
+    
     ${createText('Language Proficiency Radar', 20, 30, { color: theme.text, size: 16, weight: 'bold' })}
 
-    <!-- Grid -->
+    
     <g opacity="0.5">${gridLines}${axisLines}</g>
 
-    <!-- Data polygon -->
+    
     <polygon points="${dataPoints.join(' ')}" fill="${theme.accent}30" stroke="${theme.accent}" stroke-width="2" ${animateClass}/>
 
-    <!-- Data points -->
+    
     ${languages
       .map(([_, data], i) => {
         const angle = i * angleStep - Math.PI / 2;
@@ -146,7 +146,7 @@ function generateRadarLayout(
       })
       .join('')}
 
-    <!-- Labels -->
+    
     ${labels}
   `;
 }

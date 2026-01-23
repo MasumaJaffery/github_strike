@@ -181,7 +181,7 @@ export function generateAchievementCard(
   const unlockedCount = achievements.filter((a) => a.unlocked).length;
 
   const header = `
-    <g class="fade-in">
+    <g >
       ${createBoltIcon(20, 18, 24, theme.accent)}
       ${createText('Achievement Bolts', 50, 35, { color: theme.text, size: 18, weight: 'bold' })}
       ${createText(`${unlockedCount}/${achievements.length} Unlocked`, width - 20, 35, {
@@ -223,12 +223,12 @@ function generateGridLayout(
       const opacity = achievement.unlocked ? 1 : 0.4;
 
       return `
-        <g class="fade-in ${delayClass}" transform="translate(${x}, ${y})" opacity="${opacity}">
-          <!-- Badge circle -->
+        <g  transform="translate(${x}, ${y})" opacity="${opacity}">
+          
           <circle cx="0" cy="20" r="25" fill="${tierColor}20" stroke="${tierColor}" stroke-width="2"/>
           ${createAchievementIcon(achievement.icon, -12, 8, 24, tierColor)}
 
-          <!-- Name -->
+          
           ${createText(achievement.name, 0, 55, {
             color: theme.text,
             size: 10,
@@ -236,7 +236,7 @@ function generateGridLayout(
             anchor: 'middle',
           })}
 
-          <!-- Tier indicator -->
+          
           ${
             achievement.unlocked
               ? `<text x="0" y="70" fill="${tierColor}" font-size="8" text-anchor="middle" font-weight="bold">${achievement.tier.toUpperCase()}</text>`
@@ -269,20 +269,20 @@ function generateListLayout(
         : 0;
 
       return `
-        <g class="fade-in ${delayClass}" transform="translate(20, ${y})" opacity="${opacity}">
-          <!-- Icon -->
+        <g  transform="translate(20, ${y})" opacity="${opacity}">
+          
           <circle cx="15" cy="15" r="15" fill="${tierColor}20" stroke="${tierColor}" stroke-width="1.5"/>
           ${createAchievementIcon(achievement.icon, 6, 6, 18, tierColor)}
 
-          <!-- Name & Description -->
+          
           ${createText(achievement.name, 40, 12, { color: theme.text, size: 12, weight: 'bold' })}
           ${createText(achievement.description, 40, 26, { color: theme.textSecondary, size: 10 })}
 
-          <!-- Progress bar -->
+          
           <rect x="${width - 140}" y="8" width="100" height="8" rx="4" fill="${theme.progressBackground}"/>
           <rect x="${width - 140}" y="8" width="${progress}" height="8" rx="4" fill="${tierColor}"/>
 
-          <!-- Progress text -->
+          
           ${createText(
             `${formatNumber(achievement.progress ?? 0)}/${formatNumber(achievement.maxProgress ?? 0)}`,
             width - 140,
