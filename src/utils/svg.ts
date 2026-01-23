@@ -5,32 +5,31 @@ export function createSvgWrapper(
   width: number,
   height: number,
   theme: ThemeColors,
-  options: { animate?: boolean; borderRadius?: number; showBorder?: boolean } = {}
+  options: { animate?: boolean; borderRadius?: number; showBorder?: boolean; title?: string } = {}
 ): string {
-  const { animate = true, borderRadius = 12, showBorder = true } = options;
+  const { animate = true, borderRadius = 12, showBorder = true, title = 'GitHub Strike Card' } = options;
 
+  // GitHub-safe animations - avoid transform in keyframes (gets stripped by camo)
   const animations = animate
     ? `
     <style>
       @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
       @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.7; }
       }
-      @keyframes glow {
-        0%, 100% { filter: drop-shadow(0 0 3px ${theme.accentGlow}); }
-        50% { filter: drop-shadow(0 0 8px ${theme.accentGlow}); }
-      }
       @keyframes strike {
         0% { stroke-dashoffset: 1000; }
         100% { stroke-dashoffset: 0; }
       }
-      .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+      .fade-in {
+        opacity: 0;
+        animation: fadeIn 0.5s ease-out forwards;
+      }
       .pulse { animation: pulse 2s ease-in-out infinite; }
-      .glow { animation: glow 2s ease-in-out infinite; }
       .strike-path {
         stroke-dasharray: 1000;
         animation: strike 1.5s ease-out forwards;
@@ -48,31 +47,32 @@ export function createSvgWrapper(
     ? `stroke="${theme.border}" stroke-width="1"`
     : '';
 
-  return `
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none">
+  // Use explicit xmlns and add role/aria for GitHub compatibility
+  return `<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="${width}"
+  height="${height}"
+  viewBox="0 0 ${width} ${height}"
+  fill="none"
+  role="img"
+  aria-labelledby="titleId"
+>
+  <title id="titleId">${escapeHtml(title)}</title>
   <defs>
     <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:${theme.background}" />
-      <stop offset="50%" style="stop-color:${adjustColor(theme.background, 10)}" />
-      <stop offset="100%" style="stop-color:${theme.background}" />
+      <stop offset="0%" stop-color="${theme.background}" />
+      <stop offset="50%" stop-color="${adjustColor(theme.background, 10)}" />
+      <stop offset="100%" stop-color="${theme.background}" />
     </linearGradient>
     <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:${theme.accent}" />
-      <stop offset="100%" style="stop-color:${adjustColor(theme.accent, 20)}" />
+      <stop offset="0%" stop-color="${theme.accent}" />
+      <stop offset="100%" stop-color="${adjustColor(theme.accent, 20)}" />
     </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
   ${animations}
   <rect x="0.5" y="0.5" rx="${borderRadius}" ry="${borderRadius}" width="${width - 1}" height="${height - 1}" fill="url(#bgGradient)" ${border}/>
   ${content}
-</svg>
-  `.trim();
+</svg>`;
 }
 
 export function adjustColor(hex: string, percent: number): string {

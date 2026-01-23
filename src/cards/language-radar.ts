@@ -52,11 +52,13 @@ export function generateLanguageCard(
   }
 
   const adjustedHeight = layout === 'compact' ? 100 : height;
+  const topLanguage = sortedLanguages[0]?.[0] || 'Unknown';
 
   return createSvgWrapper(content, width, adjustedHeight, theme, {
     animate,
     borderRadius,
     showBorder,
+    title: `Top Languages - ${topLanguage} and ${sortedLanguages.length - 1} more`,
   });
 }
 

@@ -116,6 +116,7 @@ export function generateContributionTimeline(
     animate,
     borderRadius,
     showBorder,
+    title: `Contribution Timeline - ${calendar.totalContributions.toLocaleString()} contributions`,
   });
 }
 
@@ -223,6 +224,7 @@ export function generateStreakCard(
     animate,
     borderRadius,
     showBorder,
+    title: `Contribution Streak - ${currentStreak} day${currentStreak !== 1 ? 's' : ''} current, ${longestStreak} day${longestStreak !== 1 ? 's' : ''} longest`,
   });
 }
 

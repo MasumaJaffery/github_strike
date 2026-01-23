@@ -79,6 +79,7 @@ export function generateFlukebaseCard(
     animate,
     borderRadius,
     showBorder,
+    title: `${profile.user.username} on Flukebase - ${stats.totalProjects} Projects, ${stats.activeCollaborations} Collaborations`,
   });
 }
 
@@ -290,5 +291,6 @@ export function generateFlukebaseStatsCard(
     animate,
     borderRadius,
     showBorder,
+    title: `Flukebase Stats - ${stats.totalProjects} Projects, ${stats.activeCollaborations} Active Collaborations`,
   });
 }

@@ -196,6 +196,7 @@ export function generateAchievementCard(
     animate,
     borderRadius,
     showBorder,
+    title: `Achievement Bolts - ${unlockedCount}/${achievements.length} Unlocked`,
   });
 }
 

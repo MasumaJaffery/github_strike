@@ -108,6 +108,7 @@ export function generateStrikeCard(data: StrikeCardData, options: CardOptions = 
     animate,
     borderRadius,
     showBorder,
+    title: `${data.user.name || data.user.login}'s GitHub Strike - ${rank.rank} Rank`,
   });
 }
 
@@ -195,6 +196,7 @@ export function generateCompactStrikeCard(data: StrikeCardData, options: CardOpt
     animate,
     borderRadius,
     showBorder,
+    title: `${data.user.login}'s GitHub Strike - ${rank.rank} Rank (Compact)`,
   });
 }
 
