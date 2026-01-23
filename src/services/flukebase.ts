@@ -49,12 +49,68 @@ export class FlukebaseService {
     return headers;
   }
 
+  // Transform snake_case API response to camelCase
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  private transformStats(data: any): FlukebaseStats {
+    return {
+      totalProjects: data.total_projects ?? 0,
+      activeCollaborations: data.active_collaborations ?? 0,
+      completedAgreements: data.completed_agreements ?? 0,
+      projectsByStage: data.projects_by_stage ?? {},
+    };
+  }
+
+  private transformProject(data: any): FlukebaseProject {
+    return {
+      id: data.id,
+      name: data.name,
+      description: data.description ?? '',
+      stage: data.stage,
+      collaborators: data.collaborators ?? 0,
+      agreements: data.agreements ?? 0,
+      createdAt: data.created_at ?? data.createdAt,
+    };
+  }
+
+  private transformCollaboration(data: any): CollaborationAgreement {
+    return {
+      id: data.id,
+      projectId: data.project_id ?? data.projectId,
+      projectName: data.project_name ?? data.projectName,
+      role: data.role,
+      status: data.status,
+      createdAt: data.created_at ?? data.createdAt,
+      updatedAt: data.updated_at ?? data.updatedAt,
+    };
+  }
+
+  private transformUser(data: any): FlukebaseUser {
+    return {
+      id: data.id,
+      username: data.username,
+      email: data.email,
+      avatar: data.avatar,
+      bio: data.bio,
+      createdAt: data.created_at ?? data.createdAt,
+    };
+  }
+
+  private transformProfile(data: any): FlukebaseProfile {
+    return {
+      user: this.transformUser(data.user),
+      projects: (data.projects ?? []).map((p: any) => this.transformProject(p)),
+      collaborations: (data.collaborations ?? []).map((c: any) => this.transformCollaboration(c)),
+      stats: this.transformStats(data.stats),
+    };
+  }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
+
   async getProfile(username: string): Promise<FlukebaseProfile> {
     try {
       const response = await axios.get(`${this.baseUrl}/users/${username}/profile`, {
         headers: this.headers,
       });
-      return response.data;
+      return this.transformProfile(response.data);
     } catch (error) {
       // Return mock data for development/demo purposes
       return this.getMockProfile(username);
@@ -67,7 +123,8 @@ export class FlukebaseService {
         headers: this.headers,
       });
       // API returns { projects: [...], meta: {...} }
-      return response.data.projects || response.data;
+      const projects = response.data.projects || response.data;
+      return projects.map((p: any) => this.transformProject(p)); // eslint-disable-line @typescript-eslint/no-explicit-any
     } catch (error) {
       return this.getMockProjects(username);
     }
@@ -79,7 +136,8 @@ export class FlukebaseService {
         headers: this.headers,
       });
       // API returns { collaborations: [...], meta: {...} }
-      return response.data.collaborations || response.data;
+      const collaborations = response.data.collaborations || response.data;
+      return collaborations.map((c: any) => this.transformCollaboration(c)); // eslint-disable-line @typescript-eslint/no-explicit-any
     } catch (error) {
       return this.getMockCollaborations();
     }
@@ -90,7 +148,7 @@ export class FlukebaseService {
       const response = await axios.get(`${this.baseUrl}/users/${username}/stats`, {
         headers: this.headers,
       });
-      return response.data;
+      return this.transformStats(response.data);
     } catch (error) {
       return this.getMockStats();
     }
