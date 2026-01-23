@@ -48,7 +48,7 @@ export function generateStrikeCard(data: StrikeCardData, options: CardOptions = 
     width = 495,
     height = 195,
     showBorder = true,
-    borderRadius = 12,
+    borderRadius = 4.5,
     animate = true,
     hideStats = [],
   } = options;
@@ -64,8 +64,9 @@ export function generateStrikeCard(data: StrikeCardData, options: CardOptions = 
     { icon: 'streak', label: 'Current Streak', value: data.stats.currentStreak, key: 'streak' },
   ].filter((item) => !hideStats.includes(item.key));
 
+  // All attributes use single quotes to match streak-stats pattern
   const content = `
-      <g transform="translate(0, 0)">
+      <g transform='translate(0, 0)'>
         ${createIcon('bolt', 25, 22, 24, theme.accent)}
         ${createText(`${data.user.name || data.user.login}'s GitHub Strike`, 55, 40, {
           color: theme.text,
@@ -73,8 +74,8 @@ export function generateStrikeCard(data: StrikeCardData, options: CardOptions = 
           weight: 'bold',
         })}
       </g>
-      <g transform="translate(${width - 110}, 20)">
-        <rect x="0" y="0" width="90" height="35" rx="17.5" fill="${theme.accent}20" stroke="${theme.accent}" stroke-width="1"/>
+      <g transform='translate(${width - 110}, 20)'>
+        <rect x='0' y='0' width='90' height='35' rx='17.5' fill='${theme.accent}20' stroke='${theme.accent}' stroke-width='1'/>
         ${createIcon('bolt', 8, 6, 22, theme.accent)}
         ${createText(rank.rank, 35, 24, {
           color: theme.accent,
@@ -83,7 +84,7 @@ export function generateStrikeCard(data: StrikeCardData, options: CardOptions = 
         })}
       </g>
       ${generateStatsGrid(statItems, theme)}
-      <g transform="translate(25, ${height - 35})">
+      <g transform='translate(25, ${height - 35})'>
         ${createText(`Score: ${formatNumber(rank.score)}`, 0, 12, {
           color: theme.textSecondary,
           size: 11,
@@ -121,7 +122,7 @@ function generateStatsGrid(
       const y = startY + row * rowHeight;
 
       return `
-        <g transform="translate(${x}, ${y})">
+        <g transform='translate(${x}, ${y})'>
           ${createIcon(stat.icon, 0, -12, 18, theme.icon)}
           ${createText(stat.label + ':', 24, 0, {
             color: theme.textSecondary,
@@ -144,7 +145,7 @@ export function generateCompactStrikeCard(data: StrikeCardData, options: CardOpt
     width = 400,
     height = 120,
     showBorder = true,
-    borderRadius = 10,
+    borderRadius = 4.5,
     animate = true,
   } = options;
 
@@ -152,14 +153,14 @@ export function generateCompactStrikeCard(data: StrikeCardData, options: CardOpt
   const rank = calculateStrikeRank(data.stats);
 
   const content = `
-      <g transform="translate(0, 0)">
+      <g transform='translate(0, 0)'>
         ${createIcon('bolt', 15, 15, 20, theme.accent)}
         ${createText(data.user.login, 40, 30, {
           color: theme.text,
           size: 16,
           weight: 'bold',
         })}
-        <rect x="${width - 80}" y="12" width="65" height="26" rx="13" fill="${theme.accent}20" stroke="${theme.accent}" stroke-width="1"/>
+        <rect x='${width - 80}' y='12' width='65' height='26' rx='13' fill='${theme.accent}20' stroke='${theme.accent}' stroke-width='1'/>
         ${createText(rank.rank, width - 47, 30, {
           color: theme.accent,
           size: 11,
@@ -167,13 +168,13 @@ export function generateCompactStrikeCard(data: StrikeCardData, options: CardOpt
           anchor: 'middle',
         })}
       </g>
-      <g transform="translate(15, 55)">
+      <g transform='translate(15, 55)'>
         ${createCompactStat(0, 'star', data.stats.totalStars, theme)}
         ${createCompactStat(90, 'commit', data.stats.totalCommits, theme)}
         ${createCompactStat(180, 'pr', data.stats.totalPRs, theme)}
         ${createCompactStat(270, 'streak', data.stats.currentStreak, theme)}
       </g>
-      <g transform="translate(15, 90)">
+      <g transform='translate(15, 90)'>
         ${createProgressBar(0, 0, width - 30, 8, rank.percentile, theme)}
       </g>
   `;
@@ -188,7 +189,7 @@ export function generateCompactStrikeCard(data: StrikeCardData, options: CardOpt
 
 function createCompactStat(x: number, icon: string, value: number, theme: ThemeColors): string {
   return `
-    <g transform="translate(${x}, 0)">
+    <g transform='translate(${x}, 0)'>
       ${createIcon(icon, 0, -10, 16, theme.icon)}
       ${createText(formatNumber(value), 22, 2, {
         color: theme.text,
