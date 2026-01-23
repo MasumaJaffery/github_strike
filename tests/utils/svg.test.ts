@@ -39,15 +39,16 @@ describe('SVG Utils', () => {
       expect(svg).toContain(content);
     });
 
-    it('should include animations when enabled', () => {
+    it('should include style block for CSS classes', () => {
       const svg = createSvgWrapper('<rect/>', 400, 200, mockTheme, { animate: true });
-      expect(svg).toContain('@keyframes');
-      expect(svg).toContain('fadeIn');
+      expect(svg).toContain('<style>');
+      expect(svg).toContain('.fade-in');
     });
 
-    it('should exclude animations when disabled', () => {
+    it('should include style block even when animate is false', () => {
+      // Styles are always included for class compatibility (they're just empty rules)
       const svg = createSvgWrapper('<rect/>', 400, 200, mockTheme, { animate: false });
-      expect(svg).not.toContain('@keyframes');
+      expect(svg).toContain('<style>');
     });
 
     it('should include border when showBorder is true', () => {

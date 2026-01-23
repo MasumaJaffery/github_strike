@@ -9,69 +9,39 @@ export function createSvgWrapper(
 ): string {
   const { animate = true, borderRadius = 12, showBorder = true, title = 'GitHub Strike Card' } = options;
 
-  // GitHub-safe animations - avoid transform in keyframes (gets stripped by camo)
-  const animations = animate
-    ? `
+  // GitHub-compatible styles - NO animations that could leave elements invisible
+  // GitHub's camo proxy may strip CSS animations, so all elements must be visible by default
+  const styles = `
     <style>
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
-      }
-      @keyframes strike {
-        0% { stroke-dashoffset: 1000; }
-        100% { stroke-dashoffset: 0; }
-      }
-      .fade-in {
-        opacity: 0;
-        animation: fadeIn 0.5s ease-out forwards;
-      }
-      .pulse { animation: pulse 2s ease-in-out infinite; }
-      .strike-path {
-        stroke-dasharray: 1000;
-        animation: strike 1.5s ease-out forwards;
-      }
-      .delay-1 { animation-delay: 0.1s; }
-      .delay-2 { animation-delay: 0.2s; }
-      .delay-3 { animation-delay: 0.3s; }
-      .delay-4 { animation-delay: 0.4s; }
-      .delay-5 { animation-delay: 0.5s; }
+      /* Empty classes for compatibility - no opacity changes */
+      .fade-in, .delay-1, .delay-2, .delay-3, .delay-4, .delay-5 { }
+      .pulse { }
+      .strike-path { }
+      .glow { }
     </style>
-  `
-    : '';
+  `;
 
   const border = showBorder
     ? `stroke="${theme.border}" stroke-width="1"`
     : '';
 
   // Use explicit xmlns and add role/aria for GitHub compatibility
-  return `<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="${width}"
-  height="${height}"
-  viewBox="0 0 ${width} ${height}"
-  fill="none"
-  role="img"
-  aria-labelledby="titleId"
->
-  <title id="titleId">${escapeHtml(title)}</title>
-  <defs>
-    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="${theme.background}" />
-      <stop offset="50%" stop-color="${adjustColor(theme.background, 10)}" />
-      <stop offset="100%" stop-color="${theme.background}" />
-    </linearGradient>
-    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="${theme.accent}" />
-      <stop offset="100%" stop-color="${adjustColor(theme.accent, 20)}" />
-    </linearGradient>
-  </defs>
-  ${animations}
-  <rect x="0.5" y="0.5" rx="${borderRadius}" ry="${borderRadius}" width="${width - 1}" height="${height - 1}" fill="url(#bgGradient)" ${border}/>
-  ${content}
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" role="img" aria-labelledby="titleId">
+<title id="titleId">${escapeHtml(title)}</title>
+<defs>
+<linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="${theme.background}"/>
+<stop offset="50%" stop-color="${adjustColor(theme.background, 10)}"/>
+<stop offset="100%" stop-color="${theme.background}"/>
+</linearGradient>
+<linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" stop-color="${theme.accent}"/>
+<stop offset="100%" stop-color="${adjustColor(theme.accent, 20)}"/>
+</linearGradient>
+</defs>
+${styles}
+<rect x="0.5" y="0.5" rx="${borderRadius}" ry="${borderRadius}" width="${width - 1}" height="${height - 1}" fill="url(#bgGradient)" ${border}/>
+${content}
 </svg>`;
 }
 

@@ -47,7 +47,7 @@ export function generateFlukebaseCard(
 
   const content = `
     <!-- Header with Flukebase branding -->
-    <g class="fade-in">
+    <g>
       ${createFlukebaseLogo(20, 15, 28, theme.accent)}
       ${createText(`${profile.user.username} on Flukebase`, 55, 35, {
         color: theme.text,
@@ -62,17 +62,17 @@ export function generateFlukebaseCard(
     </g>
 
     <!-- Stats Row -->
-    <g class="fade-in delay-1" transform="translate(25, 55)">
+    <g transform="translate(25, 55)">
       ${generateStatBox(0, 'Projects', stats.totalProjects, theme)}
-      ${generateStatBox(120, 'Collaborations', stats.activeCollaborations, theme)}
-      ${generateStatBox(260, 'Agreements', stats.completedAgreements, theme)}
+      ${generateStatBox(150, 'Collabs', stats.activeCollaborations, theme)}
+      ${generateStatBox(300, 'Agreements', stats.completedAgreements, theme)}
     </g>
 
     <!-- Projects Section -->
-    ${showProjects ? generateProjectsSection(displayProjects, theme, animate, 25, 110, width - 50) : ''}
+    ${showProjects ? generateProjectsSection(displayProjects, theme, animate, 25, 120, width - 50) : ''}
 
     <!-- Collaboration Badges -->
-    ${showCollaborations ? generateCollaborationBadges(activeCollabs, theme, animate, 25, height - 40, width - 50) : ''}
+    ${showCollaborations ? generateCollaborationBadges(activeCollabs, theme, animate, 25, height - 45, width - 50) : ''}
   `;
 
   return createSvgWrapper(content, width, height, theme, {
@@ -86,9 +86,9 @@ export function generateFlukebaseCard(
 function generateStatBox(x: number, label: string, value: number, theme: { text: string; textSecondary: string; accent: string; border: string }): string {
   return `
     <g transform="translate(${x}, 0)">
-      <rect x="0" y="0" width="100" height="40" rx="8" fill="${theme.accent}10" stroke="${theme.border}" stroke-width="1"/>
-      ${createText(formatNumber(value), 50, 18, { color: theme.accent, size: 16, weight: 'bold', anchor: 'middle' })}
-      ${createText(label, 50, 32, { color: theme.textSecondary, size: 10, anchor: 'middle' })}
+      <rect x="0" y="0" width="130" height="45" rx="8" fill="${theme.accent}10" stroke="${theme.border}" stroke-width="1"/>
+      ${createText(formatNumber(value), 65, 22, { color: theme.accent, size: 20, weight: 'bold', anchor: 'middle' })}
+      ${createText(label, 65, 38, { color: theme.textSecondary, size: 11, anchor: 'middle' })}
     </g>
   `;
 }
@@ -96,36 +96,26 @@ function generateStatBox(x: number, label: string, value: number, theme: { text:
 function generateProjectsSection(
   projects: FlukebaseProject[],
   theme: { text: string; textSecondary: string; border: string; progressBackground: string },
-  animate: boolean,
+  _animate: boolean,
   x: number,
   y: number,
   width: number
 ): string {
   const projectRows = projects
     .map((project, i) => {
-      const rowY = y + i * 35;
+      const rowY = y + i * 38;
       const stageColor = STAGE_COLORS[project.stage] || STAGE_COLORS.idea;
-      const delayClass = animate ? `delay-${Math.min(i + 2, 5)}` : '';
 
       return `
-        <g class="fade-in ${delayClass}" transform="translate(${x}, ${rowY})">
-          <!-- Stage indicator -->
+        <g transform="translate(${x}, ${rowY})">
           <circle cx="8" cy="12" r="5" fill="${stageColor}"/>
-
-          <!-- Project name -->
-          ${createText(project.name, 20, 16, { color: theme.text, size: 12, weight: 'bold' })}
-
-          <!-- Stage label -->
-          <rect x="${width - 150}" y="2" width="60" height="18" rx="9" fill="${stageColor}20"/>
-          ${createText(project.stage, width - 120, 15, { color: stageColor, size: 9, anchor: 'middle' })}
-
-          <!-- Collaborators count -->
+          ${createText(project.name, 22, 16, { color: theme.text, size: 13, weight: 'bold' })}
+          <rect x="${width - 150}" y="2" width="65" height="20" rx="10" fill="${stageColor}20"/>
+          ${createText(project.stage, width - 117, 16, { color: stageColor, size: 10, anchor: 'middle' })}
           ${createCollaboratorIcon(width - 75, 4, 14, theme.textSecondary)}
-          ${createText(project.collaborators.toString(), width - 58, 15, { color: theme.textSecondary, size: 10 })}
-
-          <!-- Agreements count -->
+          ${createText(project.collaborators.toString(), width - 58, 16, { color: theme.textSecondary, size: 11 })}
           ${createAgreementIcon(width - 40, 4, 14, theme.textSecondary)}
-          ${createText(project.agreements.toString(), width - 23, 15, { color: theme.textSecondary, size: 10 })}
+          ${createText(project.agreements.toString(), width - 23, 16, { color: theme.textSecondary, size: 11 })}
         </g>
       `;
     })
@@ -133,7 +123,7 @@ function generateProjectsSection(
 
   return `
     <g>
-      ${createText('Recent Projects', x, y - 8, { color: theme.textSecondary, size: 10 })}
+      ${createText('Recent Projects', x, y - 10, { color: theme.textSecondary, size: 11 })}
       ${projectRows}
     </g>
   `;
@@ -142,7 +132,7 @@ function generateProjectsSection(
 function generateCollaborationBadges(
   collaborations: CollaborationAgreement[],
   theme: { text: string; textSecondary: string; accent: string },
-  animate: boolean,
+  _animate: boolean,
   x: number,
   y: number,
   _maxWidth: number
@@ -154,13 +144,12 @@ function generateCollaborationBadges(
     .map((collab, i) => {
       const badgeX = x + i * 110;
       const roleColor = ROLE_COLORS[collab.role] || ROLE_COLORS.contributor;
-      const delayClass = animate ? `delay-${Math.min(i + 3, 5)}` : '';
 
       return `
-        <g class="fade-in ${delayClass}" transform="translate(${badgeX}, ${y})">
-          <rect x="0" y="0" width="100" height="24" rx="12" fill="${roleColor}20" stroke="${roleColor}" stroke-width="1"/>
-          ${createRoleIcon(8, 4, 14, roleColor)}
-          ${createText(collab.role, 55, 16, { color: roleColor, size: 9, anchor: 'middle' })}
+        <g transform="translate(${badgeX}, ${y})">
+          <rect x="0" y="0" width="100" height="26" rx="13" fill="${roleColor}20" stroke="${roleColor}" stroke-width="1"/>
+          ${createRoleIcon(10, 5, 14, roleColor)}
+          ${createText(collab.role, 58, 17, { color: roleColor, size: 10, anchor: 'middle' })}
         </g>
       `;
     })
@@ -168,7 +157,7 @@ function generateCollaborationBadges(
 
   return `
     <g>
-      ${createText('Active Roles', x, y - 8, { color: theme.textSecondary, size: 10 })}
+      ${createText('Active Roles', x, y - 10, { color: theme.textSecondary, size: 11 })}
       ${badges}
     </g>
   `;
