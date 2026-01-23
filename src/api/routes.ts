@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { GitHubService } from '../services/github';
-import { generateStrikeCard, generateCompactStrikeCard } from '../cards';
+import { FlukebaseService } from '../services/flukebase';
+import { generateStrikeCard, generateCompactStrikeCard, generateFlukebaseCard } from '../cards';
 
 const router = Router();
 
@@ -31,6 +32,23 @@ router.get('/strike/:username', async (req: Request, res: Response) => {
       ? generateCompactStrikeCard({ user, stats })
       : generateStrikeCard({ user, stats });
 
+    sendSvg(res, svg);
+  } catch (error) {
+    handleError(res, error);
+  }
+});
+
+router.get('/flukebase/:username', async (req: Request, res: Response) => {
+  try {
+    const { username } = req.params;
+
+    const flukebase = new FlukebaseService(
+      process.env.FLUKEBASE_API_KEY,
+      process.env.FLUKEBASE_API_URL
+    );
+    const profile = await flukebase.getProfile(username);
+
+    const svg = generateFlukebaseCard(profile);
     sendSvg(res, svg);
   } catch (error) {
     handleError(res, error);

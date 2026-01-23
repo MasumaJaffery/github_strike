@@ -16,6 +16,7 @@ app.get('/', (_req, res) => {
     description: 'GitHub developer stats visualization',
     endpoints: {
       strike: '/api/strike/:username',
+      flukebase: '/api/flukebase/:username',
       health: '/api/health',
     },
   });
